@@ -1,0 +1,16 @@
+import requests,json
+url = 'https://www.ximalaya.com/revision/play/album?albumId=9723091&pageNum=1&sort=-1&pageSize=30'
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'}
+r = requests.get(url,headers = headers).json()
+# ret = r.content.decode()
+# result = json.loads(ret)
+temp = r['data']['tracksAudioPlay']
+# book = temp['src']
+un = [(item.get('src'),item.get('trackName')) for item in temp]
+# print(un) 
+for i in un:
+    print(i)
+    with open('xxx/{}.m4a'.format(i[1]),'ab') as f:
+        r = requests.get(i[0],headers = headers)
+        ret = r.content
+        f.write(ret)
