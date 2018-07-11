@@ -1,0 +1,69 @@
+
+
+import requests
+
+class Cfda:
+	#初始化函数
+	def __init__(self):
+		
+		#初始化要提交的数据
+		self.url = 'http://125.35.6.84:81/xk/itownet/portalAction.do?method=getXkzsList'
+		
+		#反爬
+		self.header = {'Accept':'*/*',
+						'Accept-Encoding':'gzip, deflate',
+						'Accept-Language':'zh-CN',
+						'Connection':'keep-alive',
+						'Content-Length':'75',
+						'Content-Type':'application/x-www-form-urlencoded;utf-8',
+						'Cookie':'JSESSIONID=9447327244569E8194225293B5679740; JSESSIONID=9447327244569E8194225293B5679740',
+						'DNT':'1',
+						'Host':'125.35.6.84:81',
+						'Origin':'http://125.35.6.84:81',
+						'Referer':'http://125.35.6.84:81/xk/',
+						'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36 Maxthon/5.2.3.4000',
+						'X-DevTools-Emulate-Network-Conditions-Client-Id':'233758a6-2700-4e62-b6a7-ede61b8e158b',
+						'X-Requested-With':'XMLHttpRequest'}
+		self.f = open('D:\python\data.txt','a')
+	
+	def getData(self,data):
+		self.html = requests.post(self.url,data = data,headers = self.header)
+		#print (self.html.json())
+		
+		
+	def extractData(self):
+		for n in range(len(self.html.json()['list'])):
+		
+			self.cfda_data = self.html.json()['list'][n]['EPS_NAME']
+			self.www = self.html.json()['list'][n]['XC_DATE']
+			
+	#def writeData(self):
+			self.f.write(self.cfda_data + '\n' )
+	
+	def fclose(self):
+		self.f.close()
+
+if __name__ == '__main__':
+		
+		
+	cfda = Cfda()
+	
+	for m in range(1,20):
+
+		data = {'on':'true',
+			'page':m,
+			'pageSize':'15',
+			'productName':'',
+			'conditionType':'1',
+			'applyname':'',
+			'applysn':''}
+
+		cfda.getData(data)
+		cfda.extractData()
+	#cfda.writeData()
+	cfda.fclose()
+
+
+
+
+		
