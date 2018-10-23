@@ -5,9 +5,9 @@ import random
 import re
 import pymysql
 
-conn = pymysql.connect(host="10.11.101.18", user="test_smj", passwd="test_smj", db="test_smj",charset="utf8")
+conn = pymysql.connect(host="", user="", passwd="", db="",charset="utf8")
 cur = conn.cursor()
-cur.execute("USE test_smj")
+cur.execute("USE ***")
 
 random.seed(datetime.datetime.now())
 
