@@ -1,0 +1,60 @@
+利用 urllib包 获取网页内容
+#引入包
+from urllib.request import urlopen
+
+response = urlopen("http://fund.eastmoney.com/fund.html")
+html = response.read();
+
+#这个网页编码是gb2312
+#print(html.decode("gb2312"))
+
+#把html内容保存到一个文件
+with open("1.txt","wb") as f:
+    f.write(html.decode("gb2312").encode("utf8"))
+    f.close()
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+使用BeautifulSoup分析html
+from bs4 import BeautifulSoup
+
+# 读取文件内容
+with open("1.txt", "rb") as f:
+    html = f.read().decode("utf8")
+    f.close()
+
+# 分析html内容
+soup = BeautifulSoup(html,"html.parser")
+
+# 取出网页title
+print(soup.title) #<title>每日开放式基金净值表 _ 天天基金网</title>
+
+# 基金编码
+codes = soup.find("table",id="oTable").tbody.find_all("td","bzdm")
+
+result = () # 初始化一个元组
+for code in codes:
+    result += ({
+        "code":code.get_text(),
+        "name":code.next_sibling.find("a").get_text(),
+        "NAV":code.next_sibling.next_sibling.get_text(),
+        "ACCNAV":code.next_sibling.next_sibling.next_sibling.get_text()
+     },)
+
+# 打印结果
+print(result[0]["name"])
+--------------------- 
+作者：学习笔记666 
+来源：CSDN 
+原文：https://blog.csdn.net/github_26672553/article/details/78529734 
+版权声明：本文为博主原创文章，转载请附上博文链接！
